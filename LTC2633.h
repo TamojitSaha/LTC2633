@@ -2,13 +2,18 @@
     @file     LTC2633.h
     @author   Tamojit Saha(github.com/TamojitSaha),
               Sandeepan Sengupta (sandeepan.info)
-    Arduino library for Linear Technology LTC®2633
+
+    Arduino library part file for miniDAC module
+    Designed for Linear Technology LTC®2633
+
     ************************************************
     About LTC®2633
     ************************************************
     The LTC®2633 is a family of dual 12-, 10-, and 8-bit voltage-output DACs with an integrated, high accuracy, low drift reference in an 8-lead TSOT-23 package.
+
     These DACs communicate via a 2-wire I2C-compatible serial interface. The LTC2633 operates in both the standard mode (clock rate of 100kHz) and the fast mode (clock rate of 400kHz).
     *************************************************
+
     Version: 1.0.0
     Released under CC-BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
     All text above, must be included in any redistribution
@@ -56,6 +61,21 @@ class LTC2633
     LTC2633();
 
     void begin(uint8_t _address = GLOBAL, uint8_t _resolution = 12, bool _frequency = HIGH);  //Initizlize, uses GLOBAL address and 12bits resolution, by default;
+    /*
+       Default resolution value is assigned to be used for the forllowing parts:
+
+       +---------+-----------------------------+
+       | Marking |         Part Number(s)      |
+       +---------+-----------------------------+
+       | LTFTC   | LTC2633A-LI12, LTC2633-LI12 |
+       | LTFTB   | LTC2633A-LX12, LTC2633-LX12 |
+       | LTFSZ   | LTC2633A-LZ12, LTC2633-LZ12 |
+       | LTFTV   | LTC2633A-LO12, LTC2633-LO12 |
+       | LTFTF   | LTC2633A-HI12, LTC2633-HI12 |
+       | LTFTD   | LTC2633A-HZ12, LTC2633-HZ12 |
+       +---------+-----------------------------+
+
+    */
     void write(uint64_t _data, uint8_t _dac = BOTH);                                          //Write and update ALL DACs, by default
     void store(uint64_t _data, uint8_t _dac = BOTH);                                          //Stores data to both DAC registers, by default
     void update(uint8_t _dac = BOTH);                                                         //Updates previously stored value of both DAC registers
@@ -67,11 +87,11 @@ class LTC2633
   private:
     uint8_t data_high;
     uint8_t data_low;
-    
+
     uint8_t addr;
     uint8_t res;
     bool freq;
-    
+
     void dataman(uint64_t _data);
     void control(uint8_t _code);
     void writeWire(uint8_t _code, uint8_t _data_high = 0x00, uint8_t _data_low = 0x00);
