@@ -13,7 +13,8 @@
     These DACs communicate via a 2-wire I2C-compatible serial interface. The LTC2633 operates in both the standard mode (clock rate of 100kHz) and the fast mode (clock rate of 400kHz).
     *************************************************
 
-    v0.1 - Alpha Release
+    Version: 1.0.0
+    Released under CC-BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
     All text above, must be included in any redistribution
 
 */
