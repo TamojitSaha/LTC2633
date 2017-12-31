@@ -31,10 +31,10 @@
 
 
 //Chip Address Configuration
-#define LTC2633_addr_GND    (0x10)
-#define LTC2633_addr_NC     (0x11)
-#define LTC2633_addr_VCC    (0x12)
-#define LTC2633_addr_GLOBAL (0x73)
+#define GND    (0x10)
+#define NC     (0x11)
+#define VCC    (0x12)
+#define GLOBAL (0x73)
 
 //Command Codes
 #define write_input_reg     (0x00)  //  Write to Input Register n
@@ -48,9 +48,9 @@
 #define no_operation        (0x0F)  //  No Operation
 
 //Address Codes
-#define DAC_A               (0x00)  //Select DAC A
-#define DAC_B               (0x01)  //Select DAC B
-#define DAC_ALL             (0x0f)  //Select both the DACs
+#define DAC0                (0x00)  //Select DAC A
+#define DAC1                (0x01)  //Select DAC B
+#define BOTH                (0x0f)  //Select both the DACs
 
 #include<Wire.h>
 
@@ -59,23 +59,26 @@ class LTC2633
   public:
     LTC2633();
 
-    void begin(uint8_t CA0_state = LTC2633_addr_GLOBAL, uint8_t resolution = 12); //uses GLOBAL address and 12bits resolution, by default;
-    void write(uint16_t _data, uint8_t _dac = DAC_ALL); //write and update ALL DACs, by default
-    void store(uint16_t _data, uint8_t _dac = DAC_ALL); //stores data to both DAC registers, by default
-    void update(uint8_t _dac = DAC_ALL); //updates previously stored value of both DAC registers
-    void powerDown(uint8_t _dac = DAC_ALL);  //power down all DAC, by default
-    void deepSleep(void);
+    void begin(uint8_t _address = GLOBAL, uint8_t _resolution = 12, bool _frequency = HIGH);  //Initizlize, uses GLOBAL address and 12bits resolution, by default;
+    void write(uint16_t _data, uint8_t _dac = BOTH);                                          //Write and update ALL DACs, by default
+    void store(uint16_t _data, uint8_t _dac = BOTH);                                          //Stores data to both DAC registers, by default
+    void update(uint8_t _dac = BOTH);                                                         //Updates previously stored value of both DAC registers
+    void powerDown(uint8_t _dac = BOTH);                                                      //Power down all DAC, by default
+    void powerOff(void);                                                                      //Shutdown entirely
     void internalReference(void);
     void externalReference(void);
-    uint8_t DAC = DAC_ALL;
-    uint8_t DAC0 = DAC_A;
-    uint8_t DAC1 = DAC_B;
 
   private:
-    uint8_t _i2caddr;
-    uint8_t _res;
-    void dataman(uint64_t _data, uint8_t &_data_high, uint8_t &_data_low);
-    void writeWire(byte _code, uint8_t _data_high, uint8_t _data_low);
+    uint8_t data_high;
+    uint8_t data_low;
+    
+    uint8_t addr;
+    uint8_t res;
+    bool freq;
+    
+    void dataman(uint64_t _data);
+    void control(byte _code);
+    void writeWire(byte _code, uint8_t _data_high = 0x00, uint8_t _data_low = 0x00);
 };
 
 
