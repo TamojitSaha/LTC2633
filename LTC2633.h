@@ -30,13 +30,13 @@
 #endif
 
 
-/*LTC2633 Address Configuration*/
+//Chip Address Configuration
 #define GND    (0x10)
 #define NC     (0x11)
 #define VCC    (0x12)
 #define GLOBAL (0x73)
 
-/*Command Codes*/
+//Command Codes
 #define write_input_reg     (0x00)  //  Write to Input Register n
 #define update_dac_reg      (0x01)  //  Update (Power-Up) DAC Register n
 #define write_update_all    (0x02)  //  Write to Input Register n, Update (Power-Up) All
@@ -47,7 +47,7 @@
 #define external_reference  (0x07)  //  Select External Reference (Power-Down Internal Reference)
 #define no_operation        (0x0F)  //  No Operation
 
-/*Address Codes*/
+//Address Codes
 #define DAC0                (0x00)  //Select DAC A
 #define DAC1                (0x01)  //Select DAC B
 #define BOTH                (0x0f)  //Select both the DACs
@@ -65,8 +65,8 @@ class LTC2633
     void update(uint8_t _dac = BOTH);                                                         //Updates previously stored value of both DAC registers
     void powerDown(uint8_t _dac = BOTH);                                                      //Power down all DAC, by default
     void powerOff(void);                                                                      //Shutdown entirely
-    void internalReference(void);                                                             //Switch to internal referance voltage
-    void externalReference(void);                                                             //Switch to external referance voltage
+    void internalReference(void);
+    void externalReference(void);
 
   private:
     uint8_t data_high;
