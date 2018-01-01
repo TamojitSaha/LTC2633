@@ -28,45 +28,59 @@
 #include <Wire.h>
 #include "LTC2633.h"
 
+
+
 LTC2633::LTC2633()
 {
 
 }
 
-void LTC2633::begin(uint8_t address, uint8_t resolution, bool frequency)
+void LTC2633::begin(uint8_t address, uint8_t resolution, uint64_t frequency)
 {
   /*
-    Inatializer
-    Takes ADDRESS, RESOLUTION and FREQUENCY as input
-    ADDRESS is 8 bits
-    RESOLUTION is 8, 10 or 12, dependant on particular variant
-    FREQUENCY is HIGH (400KHz) or LOW (100KHz)
+    Initializer
+    Takes address, resolution and frequency as input
+    Address is 8 bits
+    Resolution is 8, 10 or 12, depending on particular variant
+    Frequency can be 400KHz or 100KHz
   */
-  addr = address;
-  if ((resolution == 8) || (resolution == 10) || (resolution == 12))
+  if ((address == 0x10) || (address == 0x11) || (address == 0x12) || (address == 0x73))
   {
-    res = resolution;
-  }
-
-  freq = frequency;
-  //  TWCR = 0; //Suited for AVR only
-  Wire.begin();
-  if (frequency)
-  {
-    Wire.setClock(400000L);
+	    addr = address;
   }
   else
   {
-    Wire.setClock(100000L);
+	  addr = 0x73;
   }
+  
+  if ((resolution == 0x08) || (resolution == 0x0A) || (resolution == 0x0C))
+  {
+    res = resolution;
+  }
+  else
+  {
+	  res = 0x0C;
+  }
+  
+  if ((frequency == 0x061A80) || (frequency == 0x0186A0))
+  {
+    freq = frequency;
+  }
+  else
+  {
+	  freq = 0x061A80;
+  }
+  
+  Wire.begin();
+  Wire.setClock(freq);
   Wire.begin();
 }
 
 void LTC2633::store(uint64_t data, uint8_t dac)
 {
   /*
-     Stores data to INPUT REGISTER of LTC2633
-     Takes 64bit unsigned DATA (unsigned loong long int) and 8bits (byte) of DAC register address (Keywords: DAC0, DAC1, BOTH)
+     Stores data to input register of LTC2633
+     Takes 64bit unsigned integer (unsigned long long int) and 8bits (byte) of DAC register address
      Manipulates the data using dataman() and uses writeWire() to transmit it using I2C bus
   */
   dataman(data);
@@ -76,8 +90,8 @@ void LTC2633::store(uint64_t data, uint8_t dac)
 void LTC2633::update(uint8_t dac)
 {
   /*
-     Instructs LTC2633 to transfer its INPUT REGISTER data to DAC register address
-     Takes DAC register address as input (8bits of unsigned int -> Keywords: DAC0, DAC1, BOTH)
+     Instructs LTC2633 to transfer its input register data to DAC register address
+     Takes 8bits of DAC register address (byte) as input
      Uses control() to transmit the instruction using I2C bus
   */
   uint8_t code = (write_input_reg << 4) | dac;
@@ -88,7 +102,7 @@ void LTC2633::write(uint64_t data, uint8_t dac)
 {
   /*
      Stores data to DAC register of LTC2633
-     Takes 64bit unsigned DATA (unsigned loong long int) and 8bits (byte) of DAC register address (Keywords: DAC0, DAC1, BOTH)
+     Takes 64bit unsigned integer (unsigned long long int) and 8bits (byte) of DAC register address
      Manipulates the data using dataman() and uses writeWire() to transmit it using I2C bus
   */
   uint8_t code = (write_update_dac << 4) | dac;
@@ -99,7 +113,7 @@ void LTC2633::write(uint64_t data, uint8_t dac)
 void LTC2633::internalReference(void)
 {
   /*
-     When called, it instructs LTC2633 to switch to internal reference mode and allows user to use the DAC with internal refernce voltage
+     When called, it instructs LTC2633 to switch to internal reference mode and allows user to use the DAC with internal reference voltage
   */
   uint8_t code = (internal_reference << 4) | BOTH;
   control(code);
@@ -108,7 +122,7 @@ void LTC2633::internalReference(void)
 void LTC2633::externalReference(void)
 {
   /*
-     When called, it instructs LTC2633 to switch to external reference mode and allows user to use the DAC with external refernce voltage
+     When called, it instructs LTC2633 to switch to external reference mode and allows user to use the DAC with external reference voltage
   */
   uint8_t code = (external_reference << 4) | BOTH;
   control(code);
@@ -118,7 +132,7 @@ void LTC2633::powerDown(uint8_t dac)
 {
   /*
      Instructs LTC2633 to power down its individual DAC
-     Takes DAC register address as input (8bits of unsigned int -> Keywords: DAC0, DAC1, BOTH)
+     Takes DAC 8bits of register address (byte) as input
      Uses control() to transmit the instruction using I2C bus
   */
   uint8_t code = (power_down_dac << 4) | dac;
@@ -139,7 +153,7 @@ void LTC2633::control(uint8_t code)
 {
   /*
      DECLARED IN PRIVATE : RESTRICTED ACCESS !!!
-     Takes 8bits of unsigned int as instruction
+     Takes 8bits of number representing instruction (byte)
      Transfers it to LTC2633 over I2C but using WIRE_WRITE
   */
   Wire.beginTransmission(addr);
@@ -150,7 +164,7 @@ void LTC2633::writeWire(uint8_t code, uint8_t data_high, uint8_t data_low)
 {
   /*
      DECLARED IN PRIVATE : RESTRICTED ACCESS !!!
-     Takes three 8bits of unsigned int representaing instruction, higher data bits and lower data bits
+     Takes three 8bits of number representing instruction (byte), higher data bits and lower data bits
      Transfers them to LTC2633 over I2C but using WIRE_WRITE in three packets
   */
   Wire.beginTransmission(addr);
@@ -165,7 +179,7 @@ void LTC2633::dataman(uint64_t data)
   /*
      DECLARED IN PRIVATE : RESTRICTED ACCESS !!!
      Data manager and manipulator
-     Takes 64bit unsigned DATA (unsigned loong long int)
+     Takes 64bit unsigned integer (unsigned long long int)
      Constrains it in range relative to initialized resolution and segments in two 8bits of unsigned integer (declared in private)
   */
   data = constrain(data, 0, pow(2, res)); /*Constraining data in range relative to resolution*/
