@@ -1,7 +1,7 @@
 /*
     @file     LTC2633.ino
     @author   Tamojit Saha(github.com/TamojitSaha),
-              Sandeepan Sengupta (https://www.sandeepan.info)
+              Sandeepan Sengupta (sandeepan.info)
 
     Arduino demonstration file for miniDAC module
     Designed for Linear Technology LTC®2633
@@ -27,7 +27,7 @@
     |    8 | LTFTR   | LTC2633-HZ8                 |
     +------+---------+-----------------------------+
 
-    Version: 1.0.0
+    Version: 1.0.1
     Released under CC-BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
     All text above, must be included in any redistribution
 */
@@ -40,18 +40,21 @@ LTC2633 myDAC; /*declare*/
 void setup()
 {
   myDAC.begin();
-  /* USAGE:
+  /* ABOUT: Initialize with ADDRESS, RESOLUTION and FREQUENCY
 
-     Initialize with ADDRESS, RESOLUTION and FREQUENCY
+     USAGE: Takes two 8bits (byte) value and a boolean as input
 
-     Accepted formats:
+     ACCEPTED FORMATS:
+     <put name here>.begin();
+     <put name here>.begin(ADDRESS);
+     <put name here>.begin(ADDRESS, RESOLUTION);
      <put name here>.begin(ADDRESS, RESOLUTION, FREQUENCY);
 
-     ADDRESS keywords: VCC, NC, GND, GLOBAL
-     RESOLUTION keywords/values: 8, 10, 12
-     FREQUENCY keywords/values: LOW (0) or HIGH (1)
+     ADDRESS keywords           : VCC, NC, GND, GLOBAL
+     RESOLUTION keywords/values : 8, 10, 12
+     FREQUENCY keywords/values  : LOW (0) or HIGH (1)
 
-     Note #1    : RESOLUTION value other than 8, 10 or 12 will be rejected and system will switch to 12 bits resolution setup
+     Note #1    : RESOLUTION value other than 8, 10 or 12 will be rejected and program will switch to 12 bits resolution setup
 
      WARNING #2 : Even when using values 8, 10 or 12, make sure its according to LTC2633 specification.
      Please verify markings on IC with the following table:
@@ -64,28 +67,27 @@ void setup()
      |    8 | LTFTQ, LTFTP, LTFSZ, LTFTN, LTFTS, LTFTR |
      +------+------------------------------------------+
 
-     examples:
-     <put name here>.begin();                       //Switch to default configuration: ADDRESS = GLOBAL, RESOLUTION = 12, FREQUENCY = HIGH
-     <put name here>.begin(VCC);                    //Switch to default configuration: RESOLUTION = 12, FREQUENCY = HIGH
-     <put name here>.begin(NC, resolution);         //Given, 'resolution' value is supplied, Switch to default configuration: FREQUENCY = HIGH
-     <put name here>.begin(GND, resolution, LOW);   //'resolution' value must be supplied
+     EXAMPLES:
+     myDAC.begin();                     //Switch 'myDAC' to default configuration: ADDRESS = GLOBAL, RESOLUTION = 12, FREQUENCY = HIGH
+     myDAC.begin(VCC);                  //Switch 'myDAC' to default configuration: RESOLUTION = 12, FREQUENCY = HIGH
+     myDAC.begin(NC, resolution);       //Given, 'resolution' value is supplied, Switch 'myDAC' to default configuration: FREQUENCY = HIGH
+     myDAC.begin(GND, resolution, LOW); //'resolution' value for 'myDAC' must be supplied
   */
 
   myDAC.externalReference();
-  /* USAGE:
+  /* ABOUT: Instructs LTC2633 to switch to external reference mode and allows user to use the DAC with external refernce voltage
 
-     Instructs LTC2633 to switch to external reference mode and allows user to use the DAC with external refernce voltage
+     USAGE:
 
-     Accepted format:
+     ACCEPTED FORMAT:
      <put name here>.externalReference();
 
-     Example
-     myDAC.externalReference()                      //For 'myDAC'
-
+     EXAMPLE:
+     myDAC.externalReference()          //For 'myDAC'
   */
 
-  /* Note #2    :The following parts have POWER-ON REFERANCE MODE set to EXTERNAL REFERENCE.
-     Either use external voltage reference IC or remember switching to INTERNAL REFERANCE mode while using these parts.
+  /* Note #2    : The following parts have POWER-ON REFERANCE MODE set to EXTERNAL REFERENCE.
+     Either use external voltage reference IC or remember switch to INTERNAL REFERANCE mode while using these parts.
 
      +------+------------------------------+---------+
      | Bits |        Part Number(s)        | Marking |
@@ -97,15 +99,15 @@ void setup()
   */
 
   myDAC.internalReference();
-  /* USAGE:
+  /* ABOUT: Instructs LTC2633 to switch to internal reference mode and allows user to use the DAC with internal refernce voltage
 
-     Instructs LTC2633 to switch to internal reference mode and allows user to use the DAC with internal refernce voltage
+     USAGE:
 
-     Accepted format:
+     ACCEPTED FORMAT:
      <put name here>.internalReference();
 
-     Example
-     myDAC.internalReference()                      //For 'myDAC'
+     EXAMPLE:
+     myDAC.internalReference()          //For 'myDAC'
   */
 
 }
@@ -115,84 +117,84 @@ void loop()
   uint64_t value = random(0, pow(2, resolution));   //generate a random number in range (for testing purposes only)
 
   myDAC.store(value);
-  /* USAGE:
+  /* ABOUT: Stores VALUE to INPUT REGISTER of LTC2633
 
-     Stores VALUE to INPUT REGISTER of LTC2633
+     USAGE:
      Takes 64bit unsigned VALUE (unsigned loong long int) and 8bits (byte) of DAC register address
 
-     Accepted formats:
-          <put name here>.store(VALUE);
+     ACCEPTED FORMATS:
+     <put name here>.store(VALUE);
      <put name here>.store(VALUE, DAC);
 
      DAC register keywords: DAC0, DAC1, BOTH
 
-     examples:
-     myDAC.store(value);                            //Given, 'value' is supplied for 'myDAC', switch to default configuration: DAC = BOTH
-     myDAC.store(value, DAC0);                      //For 'myDAC', 'value' must be supplied
+     EXAMPLES:
+     myDAC.store(value);                //Given, 'value' is supplied, switch 'myDAC' to default configuration: DAC = BOTH
+     myDAC.store(value, DAC0);          //For 'myDAC', 'value' must be supplied
   */
 
   myDAC.update();
-  /* USAGE:
+  /* ABOUT: Instructs LTC2633 to transfer its INPUT REGISTER data to respective DAC register
 
-     Instructs LTC2633 to transfer its INPUT REGISTER data to DAC register
+     USAGE:
      Takes 8bits of DAC register address (byte) as input
 
      Note: Recomended to use after 'value' is '<put name here>.store()' -ed earlier
 
-     Accepted formats:
+     ACCEPTED FORMATS:
      <put name here>.update();
      <put name here>.update(DAC);
 
      DAC register keywords: DAC0, DAC1, BOTH
 
-     examples:
-     myDAC.update();                                //Switch 'myDAC' to default configuration: DAC = BOTH
+     EXAMPLES:
+     myDAC.update();                    //Switch 'myDAC' to default configuration: DAC = BOTH
      myDAC.update(DAC0);
   */
 
   myDAC.write(value);
-  /* USAGE:
+  /* ABOUT: Stores 'value' to DAC register of LTC2633
 
-     Stores 'value' to DAC register of LTC2633
+     USAGE:
      Takes 64bit unsigned DATA (unsigned loong long int) and 8bits (byte) of DAC register address
 
-     Accepted formats:
+     ACCEPTED FORMATS:
      <put name here>.write(VALUE);
      <put name here>.write(VALUE, DAC);
 
      DAC register keywords: DAC0, DAC1, BOTH
 
-     examples:
-     myDAC.write(value);                            //Given, 'value' is supplied for 'myDAC', switch to default configuration: DAC = BOTH
-     myDAC.write(value, DAC0);                      //For 'myDAC', 'value' must be supplied
+     EXAMPLES:
+     myDAC.write(value);                //Given, 'value' is supplied, switch 'myDAC' to default configuration: DAC = BOTH
+     myDAC.write(value, DAC0);          //For 'myDAC', 'value' must be supplied
   */
 
   myDAC.powerDown();
-  /* USAGE:
+  /* ABOUT: Instructs LTC2633 to power down its individual DACs
 
-     Instructs LTC2633 to power down its individual DACs
+     USAGE:
      Takes 8bits of DAC register address (byte) as input
 
-     Accepted formats:
+     ACCEPTED FORMATS:
      <put name here>.powerDown();
      <put name here>.powerDown(DAC);
 
      DAC register keywords: DAC0, DAC1, BOTH
 
-     examples:
-     myDAC.powerDown();                              //Switch 'myDAC' to default configuration: DAC = BOTH
-     myDAC.powerDown(DAC0);                          //For 'myDAC'
+     EXAMPLES:
+     myDAC.powerDown();                 //Switch 'myDAC' to default configuration: DAC = BOTH
+     myDAC.powerDown(DAC0);             //For 'myDAC'
   */
 
   myDAC.powerOff();
-  /* USAGE:
+  /* ABOUT: Instructs LTC2633 to power off completely
 
-     Instructs LTC2633 to power off completely
+     USAGE:
 
-     Accepted format:
+     ACCEPTED FORMAT:
      <put name here>.powerDown();
 
-     example:
-     myDAC.powerOff();                              //For 'myDAC'
+     EXAMPLE:
+     myDAC.powerOff();                  //For 'myDAC'
   */
 }
