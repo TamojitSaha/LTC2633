@@ -120,7 +120,7 @@ void loop()
   /* ABOUT: Stores VALUE to INPUT REGISTER of LTC2633
 
      USAGE:
-     Takes 64bit unsigned VALUE (unsigned loong long int) and 8bits (byte) of DAC register address
+     Takes 64bit unsigned VALUE (unsigned loong long int) and 8bits of DAC register address (byte)
 
      ACCEPTED FORMATS:
      <put name here>.store(VALUE);
