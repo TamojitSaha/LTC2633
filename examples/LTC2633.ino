@@ -87,7 +87,7 @@ void setup()
   */
 
   /* Note #2    : The following parts have POWER-ON REFERANCE MODE set to EXTERNAL REFERENCE.
-     Either use external voltage reference IC or remember switch to INTERNAL REFERANCE mode while using these parts.
+     Either use external voltage reference IC or remember switching to INTERNAL REFERANCE mode while using these parts.
 
      +------+------------------------------+---------+
      | Bits |        Part Number(s)        | Marking |
