@@ -1,25 +1,92 @@
-
-
-
-
 #######################################
 # Syntax Coloring Map For LTC2633
 ####################################### 
 # Class (KEYWORD1)
 #######################################
 
-LTC2633 KEYWORD1
+LTC2633	KEYWORD1	LTC2633
+
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################	
 
-begin  	KEYWORD2
-store   KEYWORD2
-update  	KEYWORD2
-write  KEYWORD2
-internalReference  	KEYWORD2
-externalReference  KEYWORD2
-powerDown  	KEYWORD2
-powerOff  KEYWORD2
+begin	KEYWORD2
 
+store	KEYWORD2
+update	KEYWORD2
+write	KEYWORD2
+
+internalReference	KEYWORD2
+externalReference	KEYWORD2
+
+powerDown	KEYWORD2
+powerOff	KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+SLOW	LITERAL1
+slow	LITERAL1
+FAST	LITERAL1
+fast	LITERAL1
+
+NC	LITERAL1
+nc	LITERAL1
+GND	LITERAL1
+gnd	LITERAL1
+VCC	LITERAL1
+vcc	LITERAL1
+ALL	LITERAL1
+all	LITERAL1
+GLOBAL	LITERAL1
+global	LITERAL1
+CUSTOM	LITERAL1
+custom	LITERAL1
+
+VIII	LITERAL1
+viii	LITERAL1
+X	LITERAL1
+x	LITERAL1
+XII	LITERAL1
+xii	LITERAL1
+
+DAC0	LITERAL1
+dac0	LITERAL1
+DAC1	LITERAL1
+dac1	LITERAL1
+BOTH	LITERAL1
+both	LITERAL1
+
+write_input_reg	LITERAL1
+update_dac_reg	LITERAL1
+write_update_all	LITERAL1
+write_update_dac	LITERAL1
+power_down_dac	LITERAL1
+power_down_all	LITERAL1
+internal_reference	LITERAL1
+external_reference	LITERAL1
+no_operation	LITERAL1
+
+
+#######################################
+# Variables (LITERAL2)
+#######################################
+
+DAC	LITERAL2
+dac	LITERAL2
+BOX	LITERAL2
+box	LITERAL2
+
+BITS	LITERAL2
+bits	LITERAL2
+
+RATE	LITERAL2
+rate	LITERAL2
+
+DATA	LITERAL2
+data	LITERAL2
+VALUE	LITERAL2
+value	LITERAL2
