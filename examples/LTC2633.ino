@@ -1,7 +1,7 @@
 /*
     @file     LTC2633.ino
-    @author   Tamojit Saha(github.com/TamojitSaha),
-              Sandeepan Sengupta (sandeepan.info)
+    @author   Tamojit Saha (http://github.com/TamojitSaha),
+              Sandeepan Sengupta (http://sandeepan.info)
 
     Arduino demonstration file for miniDAC module
     Designed for Linear Technology LTC®2633
