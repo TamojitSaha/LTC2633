@@ -111,7 +111,6 @@ void setup()
      EXAMPLE:
      myDAC.internalReference()          //For 'myDAC'
   */
-
 }
 
 void loop()
