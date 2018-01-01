@@ -29,7 +29,7 @@
     |      | LTFTR   | LTC2633-HZ8                 |
     +------+---------+-----------------------------+
 
-    Version: 1.0.1
+    Version: 0.1.0
     Released under CC-BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
     All text above, must be included in any redistribution
 */
