@@ -35,7 +35,7 @@
 */
 
 #include <LTC2633.h>
-LTC2633 myDAC; /*declare*/
+LTC2633 myDAC;                              /*declare*/
 
 /*
   NOTE #1:  Please follow the keyword table given below
