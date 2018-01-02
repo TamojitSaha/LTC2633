@@ -3,7 +3,7 @@
 ## Table of Contents
 
 - [About](#About)
-- [Feedback](#feedback)
+- [Contact](#contact)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
@@ -14,8 +14,8 @@ The [LTC®2633](http://www.linear.com/product/LTC2633) is a family of dual 12-, 
 These DACs communicate via a 2-wire I2C-compatible serial interface. The LTC2633 operates in both the standard mode (clock rate of 100kHz) and the fast mode (clock rate of 400kHz).
 
 
-## Feedback
-Feel free to send us feedback on facebook:
+## Contact
+Connect us here:
 <br><br>
  [![Build Platforms](https://img.shields.io/badge/id-Tamojit-54C7EC.svg?style=for-the-badge)](https://www.linkedin.com/in/tamojit-saha/)<br>
  [![Build Platforms](https://img.shields.io/badge/id-Sandeepan-54C7EC.svg?style=for-the-badge)](https://www.linkedin.com/in/sandeepan-sengupta/)
@@ -29,4 +29,3 @@ Contents of this repository are realeased under [CC-BY-NC-SA 4.0](./LICENSE.md) 
 ## Acknowledgments
 
 Thanks to the contributors! :wink:
-
