@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [About](#About)
+- [About](#about)
 - [Contact](#contact)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
