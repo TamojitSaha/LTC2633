@@ -17,8 +17,8 @@ These DACs communicate via a 2-wire I2C-compatible serial interface. The LTC2633
 ## Contact
 Connect us here:
 <br><br>
- [![Build Platforms](https://img.shields.io/badge/id-Tamojit-54C7EC.svg?style=for-the-badge)](https://www.linkedin.com/in/tamojit-saha/)<br>
- [![Build Platforms](https://img.shields.io/badge/id-Sandeepan-54C7EC.svg?style=for-the-badge)](https://www.linkedin.com/in/sandeepan-sengupta/)
+ [![Build Platforms](https://img.shields.io/badge/id-Sandeepan-54C7EC.svg?style=for-the-badge)](http://sandeepan.info)<br>
+ [![Build Platforms](https://img.shields.io/badge/id-Tamojit-54C7EC.svg?style=for-the-badge)](http://tamojitsaha.info)
 <p> 
 or <a href ="https://github.com/TamojitSaha/LTC2633/issues/new/">file an issue</a>. Feature requests are always welcome.</p>
 
