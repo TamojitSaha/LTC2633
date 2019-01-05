@@ -4,17 +4,17 @@
 # Class (KEYWORD1)
 #######################################
 
-LTC2633	KEYWORD1
+LTC2633	KEYWORD1	LTC2633
 
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################	
 
-cfgr	KEYWORD2
+link	KEYWORD2
 
-_slow	KEYWORD2
-_fast	KEYWORD2
+slow	KEYWORD2
+fast	KEYWORD2
 
 volt	KEYWORD2
 load	KEYWORD2
@@ -67,19 +67,11 @@ no_operation	LITERAL1
 
 
 #######################################
-# Data Types (LITERAL1)
-#######################################
-
-DAC	LITERAL1
-rate	LITERAL1
-address	LITERAL1
-resolution	LITERAL1
-
-
-#######################################
 # Variables (LITERAL2)
 #######################################
 
+DAC	LITERAL2
+dac	LITERAL2
 
 DATA	LITERAL2
 data	LITERAL2

@@ -35,39 +35,42 @@ LTC2633::LTC2633()
 
 }
 
-void LTC2633::cfgr(address _adr, resolution _rsl, rate _rte)
+void LTC2633::link(uint8_t address)
 {
   /*
     Takes 8bits of I2C address as input
   */
-  adrs = _adr;
-  rsln = _rsl;
-  Wire.begin();
-  Wire.setClock(_rte);
-  Wire.end();
+  if ((address == 0x10) || (address == 0x11) || (address == 0x12) || (address == 0x73))
+  {
+	    adrs = address;
+  }
+  else
+  {
+	  adrs = 0x73;
+  }
 }
 
-void LTC2633::_slow()
+void LTC2633::slow()
 {
   /*
-    Set I2C frequency to 100KHz
+	Set I2C frequency to 100KHz
   */
   Wire.begin();
   Wire.setClock(0x0186A0);
-  Wire.end();
+  Wire.begin();
 }
 
-void LTC2633::_fast()
+void LTC2633::fast()
 {
   /*
-    Set I2C frequency to 400KHz
+	Set I2C frequency to 400KHz
   */
   Wire.begin();
   Wire.setClock(0x061A80);
-  Wire.end();
+  Wire.begin();
 }
 
-void LTC2633::volt(uint64_t data, DAC dac)
+void LTC2633::volt(uint64_t data, uint8_t dac)
 {
   /*
      Stores data to DAC register of LTC2633
@@ -79,7 +82,7 @@ void LTC2633::volt(uint64_t data, DAC dac)
   writeWire(code, byte(data_high), byte(data_low));
 }
 
-void LTC2633::load(DAC dac)
+void LTC2633::load(uint8_t dac)
 {
   /*
      Instructs LTC2633 to transfer its input register data to DAC register address
@@ -90,7 +93,7 @@ void LTC2633::load(DAC dac)
   control(code);
 }
 
-void LTC2633::store(uint64_t data, DAC dac)
+void LTC2633::store(uint64_t data, uint8_t dac)
 {
   /*
      Stores data to input register of LTC2633
@@ -105,7 +108,7 @@ void LTC2633::store(uint64_t data, DAC dac)
 void LTC2633::x08(void)
 {
   /*
-    Defines resolution as 8bits
+	Defines resolution as 8bits
   */
   rsln = 0x08;
 }
@@ -113,7 +116,7 @@ void LTC2633::x08(void)
 void LTC2633::x0A(void)
 {
   /*
-    Defines resolution as 10bits
+	Defines resolution as 10bits
   */
   rsln = 0x0A;
 }
@@ -121,7 +124,7 @@ void LTC2633::x0A(void)
 void LTC2633::x0C(void)
 {
   /*
-    Defines resolution as 12bits
+	Defines resolution as 12bits
   */
   rsln = 0x0C;
 }
@@ -137,7 +140,7 @@ void LTC2633::powerOff(void)
   control(code);
 }
 
-void LTC2633::powerDown(DAC dac)
+void LTC2633::powerDown(uint8_t dac)
 {
   /*
      Instructs LTC2633 to power down its individual DAC
@@ -153,7 +156,7 @@ void LTC2633::internalReference(void)
   /*
      When called, it instructs LTC2633 to switch to internal reference mode and allows user to use the DAC with internal reference voltage
   */
-  uint8_t code = (internal_reference << 4) | 0x0f;
+  uint8_t code = (internal_reference << 4) | BOTH;
   control(code);
 }
 
@@ -162,7 +165,7 @@ void LTC2633::externalReference(void)
   /*
      When called, it instructs LTC2633 to switch to external reference mode and allows user to use the DAC with external reference voltage
   */
-  uint8_t code = (external_reference << 4) | 0x0f;
+  uint8_t code = (external_reference << 4) | BOTH;
   control(code);
 }
 
@@ -173,9 +176,9 @@ void LTC2633::control(uint8_t code)
      Takes 8bits of number representing instruction (byte)
      Transfers it to LTC2633 over I2C but using WIRE_WRITE
   */
-  Wire.begin(adrs);
+  Wire.beginTransmission(adrs);
   WIRE_WRITE(code);
-  Wire.end();
+  Wire.endTransmission();
 }
 void LTC2633::writeWire(uint8_t code, uint8_t data_high, uint8_t data_low)
 {
@@ -184,11 +187,11 @@ void LTC2633::writeWire(uint8_t code, uint8_t data_high, uint8_t data_low)
      Takes three 8bits of number representing instruction (byte), higher data bits and lower data bits
      Transfers them to LTC2633 over I2C but using WIRE_WRITE in three packets
   */
-  Wire.begin(adrs);
+  Wire.beginTransmission(adrs);
   WIRE_WRITE(code);
   WIRE_WRITE(data_high);
   WIRE_WRITE(data_low);
-  Wire.end();
+  Wire.endTransmission();
 }
 
 void LTC2633::dataman(uint64_t data)

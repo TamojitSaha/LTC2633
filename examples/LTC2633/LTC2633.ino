@@ -1,6 +1,6 @@
 /*
   @file     LTC2633.ino
-  @author   Tamojit Saha (http://tamojitsaha.info),
+  @author   Tamojit Saha (http://github.com/TamojitSaha),
             Sandeepan Sengupta (http://sandeepan.info)
 
   Arduino demonstration file for miniDAC module
@@ -14,7 +14,7 @@
   These DACs communicate via a 2-wire I2C-compatible serial interface. The LTC2633 operates in both the standard mode (clock rate of 100kHz) and the fast mode (clock rate of 400kHz).
   *************************************************
 
-  WARNING #1: Parts with the following markings MUST have Vcc in the range between 4.5V and 5.5V
+  WARNING #1: Parts with the following markings MUST be have Vcc in the range between 4.5V and 5.5V
 
   +------+---------+-----------------------------+
   | Bits | Marking |       Part Number(s)        |
@@ -38,29 +38,21 @@
 LTC2633 myDAC;                  /*declare*/
 
 /*
-  NOTE #1:  Please find the custom datatype used in this library in table given below
-  +------------+----------------+---------------+
-  | Data Type  |     Values     |  Description  |
-  +------------+----------------+---------------+
-  |            | FAST, fast,    |    Set        |
-  |   rate     | SLOW, slow,    |  I2C Speed    |
-  +------------+----------------+---------------+
-  |            | VIII, viii,    |     Set       |
-  | resolution | X, x,          |     DAC       |
-  |            | XII, xii       |   Resolution  |
-  +------------+----------------+---------------+
-  |            | DAC0, dac0,    |               |
-  |    DAC     | DAC1, dac1,    |   Select DAC  |
-  |            | BOTH, both     |               |
-  +------------+----------------+---------------+
-  |            | NC, nc,        |               |
-  |            | GND, gnd,      |               |
-  |  address   | VCC, vcc,      | Select DAC    |
-  |            | ALL, all,      | address (I2C) |
-  |            | GLOBAL, global |               |
-  +------------+----------------+---------------+
-
-  NOTE #2:  Please follow the keyword table given below
+  NOTE #1:  Please follow the keyword table given below
+  +--------------+--------------+-----------------------------------------+
+  |     Type     |  Variables   |                Constants                |
+  +--------------+--------------+-----------------------------------------+
+  |              |              | NC, nc,                                 |
+  |              |              | GND, gnd,                               |
+  | I2C Address  |              | VCC, vcc,                               |
+  | (Global=All) |              | ALL, all,                               |
+  |              | DAC, dac     | GLOBAL, global,                         |
+  |              |(uint8_t type)| CUSTOM, custom                          |
+  +--------------+              +-----------------------------------------+
+  |              |              | DAC0, dac0,                             |
+  | DAC Register |              | DAC1, dac1,                             |
+  |              |              | BOTH, both                              |
+  +--------------+--------------+-----------------------------------------+
   +#######################################################################+
   +--------------+--------------+-----------------------------------------+
   |              |              | write_input_reg, update_dac_reg,        |
@@ -73,57 +65,34 @@ LTC2633 myDAC;                  /*declare*/
 
 void setup()
 {
-  myDAC.cfgr();
+  myDAC.link(all);
   /*
-    ABOUT : Confiure DAC address, resolution and I2C transfer rate
+    ABOUT : Initialize with Address
 
-    USAGE : Takes 8bits of I2C Address (address)
-            and
-            DAC resolution (resolution) in bit(s)
-            and
-            I2C transfer rate (rate) as input(s)
+    USAGE : Takes 8bits of I2C Address (byte) as input
 
     ACCEPTED FORMATS :
-    <put name here>.cfgr();
-    <put name here>.cfgr(Address);
-    <put name here>.cfgr(Address, Resolution);
-    <put name here>.cfgr(Address, Resolution, Rate);
+    <put name here>.link();
+    <put name here>.link(Address);
 
     EXAMPLES:
-    myDAC.cfgr();
-    //Switch 'myDAC' to default configuration:
-      //Address = GLOBAL (0x73)
-      //Resolution = XII (0x0C)
-      //Rate = slow (0x0186A0)
+    myDAC.link();               //Switch 'myDAC' to default configuration: Address = GLOBAL (0x73)
+    myDAC.link(VCC);            //Switch 'myDAC' to given configuration: Address = VCC (0x12)
+ */
 
-    myDAC.cfgr(VCC);
-    //Switch 'myDAC' to given configuration:
-      //Address = VCC (0x12)
-    myDAC.cfgr(VCC, XII);
-    //Switch 'myDAC' to given configuration:
-      //Address = VCC (0x12),
-      //Resolution = XII (0x0C)
-    myDAC.cfgr(VCC, xii, slow);
-    //Switch 'myDAC' to given configuration:
-      //Address = VCC (0x12),
-      //Resolution = XII (0x0C),
-      //Rate = slow (0x0186A0)
-  */
-
-  myDAC._fast();
+  myDAC.fast();
   /*
     ABOUT : Set I2C clock frequency to 400KHz
 
     USAGE : It's a void type function can be used just by calling it
 
     ACCEPTED FORMATS :
-    <put name here>._slow();
-    <put name here>._fast();
+    <put name here>.fast();
 
     EXAMPLES:
-    myDAC._slow();               //Set I2C clock frequency to 100KHz
-    myDAC._fast();               //Set I2C clock frequency to 400KHz
-  */
+    myDAC.fast();               //Set I2C clock frequency to 400KHz
+ */
+
   myDAC.x0C();
   /*
     ABOUT : Defines LTC2633 resolution as 12bits
@@ -135,15 +104,15 @@ void setup()
     <put name here>.x0A();      //Defines resolution as 10 bits
     <put name here>.x0C();      //Defines resolution as 12 bits
 
-    Note #3: Unless changed by calling proper function listed below, system initializes to 12 bits resolution setup.
+    Note #2: Unless changed by calling proper function listed below, system initializes to 12 bits resolution setup.
 
-    +-----------------------+-------------+-------------------------------+
-    |    Function Usage     |   Example   |           Operation           |
-    +-----------------------+-------------+-------------------------------+
-    | <put name here>.x08() | myDAC.x08() | Defines resolution as 8 bits  |
-    | <put name here>.x0A() | myDAC.x0A() | Defines resolution as 10 bits |
-    | <put name here>.x0C() | myDAC.x0C() | Defines resolution as 12 bits |
-    +-----------------------+-------------+-------------------------------+
+	+-----------------------+-------------+-------------------------------+
+	|    Function Usage     |   Example   |           Operation           |
+	+-----------------------+-------------+-------------------------------+
+	| <put name here>.x08() | myDAC.x08() | Defines resolution as 8 bits  |
+	| <put name here>.x0A() | myDAC.x0A() | Defines resolution as 10 bits |
+	| <put name here>.x0C() | myDAC.x0C() | Defines resolution as 12 bits |
+	+-----------------------+-------------+-------------------------------+
 
     WARNING #2: Even when using these function, make sure it matches to the particular LTC2633 variant to avoid unexpected behavior.
 
@@ -161,10 +130,10 @@ void setup()
     myDAC.x08();                //Defines resolution as 8 bits
     myDAC.x0A();                //Defines resolution as 10 bits
     myDAC.x0C();                //Defines resolution as 12 bits
-  */
+ */
 
   myDAC.externalReference();
-  /*
+   /*
     ABOUT : Instructs LTC2633 to switch to external reference mode and allows user to use the DAC with external reference voltage
 
     USAGE : It's a void type function can be used just by calling it
@@ -212,9 +181,7 @@ void loop()
   /*
     ABOUT : Stores value to input register of LTC2633
 
-    USAGE : Takes 64bit unsigned integer (unsigned long long int)
-            and
-            8bits of DAC register address (DAC) as input(s)
+    USAGE : Takes 64bit unsigned integer (unsigned long long int) and 8bits of DAC register address (byte)
 
     ACCEPTED FORMATS:
     <put name here>.store(VALUE);
@@ -231,14 +198,14 @@ void loop()
 
     USAGE : Takes 8bits of DAC register address (byte) as input
 
-    Note #5 : Recommended to use after 'value' is '<put name here>.store()' -ed earlier
+    Note  : Recommended to use after 'value' is '<put name here>.store()' -ed earlier
 
     ACCEPTED FORMATS:
     <put name here>.load();
-    <put name here>.load(dac);
+    <put name here>.load(DAC);
 
     EXAMPLES:
-    myDAC.load();               //Switch 'myDAC' to default configuration: dac = BOTH
+    myDAC.load();               //Switch 'myDAC' to default configuration: DAC = BOTH
     myDAC.load(DAC0);
   */
 
@@ -246,16 +213,14 @@ void loop()
   /*
     ABOUT : Stores 'value' to DAC register of LTC2633
 
-    USAGE : Takes 64bit unsigned DATA (unsigned long long int)
-            and
-            8bits (DAC) of DAC register address as input(s)
+    USAGE : Takes 64bit unsigned DATA (unsigned long long int) and 8bits (byte) of DAC register address
 
     ACCEPTED FORMATS:
     <put name here>.volt(VALUE);
-    <put name here>.volt(value, dac);
+    <put name here>.volt(VALUE, DAC);
 
     EXAMPLES:
-    myDAC.volt(VALUE);          //Given, 'value' is supplied, switch 'myDAC' to default configuration: dac = BOTH
+    myDAC.volt(value);          //Given, 'value' is supplied, switch 'myDAC' to default configuration: DAC = BOTH
     myDAC.volt(value, DAC0);    //For 'myDAC', 'value' must be supplied
   */
 
@@ -263,7 +228,7 @@ void loop()
   /*
     ABOUT : Instructs LTC2633 to power down its individual DACs
 
-    USAGE : Takes 8bits of DAC register address (DAC) as input
+    USAGE : Takes 8bits of DAC register address (byte) as input
 
     ACCEPTED FORMATS:
     <put name here>.powerDown();
