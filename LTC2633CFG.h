@@ -52,6 +52,17 @@
 #define LTC2633CFG_H
 
 
+/*Address Codes*/
+typedef enum
+{
+  DAC0 = 0x00,
+  dac0 = 0x00,
+  DAC1 = 0x01,
+  dac1 = 0x01,
+  BOTH = 0x0F,
+  both = 0x0f
+} DAC;
+
 /*LTC®2633 I2C Transfer Rate*/
 typedef enum
 {
@@ -60,23 +71,6 @@ typedef enum
   FAST = 0x061A80,
   fast = 0x061A80
 } rate;
-
-/*LTC®2633 Resolution*/
-typedef enum
-{
-  VIII = 0x08,
-  viii = 0x08,
-  eight = 0x08,
-  EIGHT = 0x08,
-  X = 0x0A,
-  x = 0x0a,
-  ten = 0x0a,
-  TEN = 0x0a,
-  XII = 0x0C,
-  xii = 0x0c,
-  twelve = 0x0c,
-  TWELVE = 0x0c
-} resolution;
 
 /*LTC®2633 Address Configuration*/
 typedef enum
@@ -98,16 +92,29 @@ typedef enum
            */
 } address;
 
-/*Address Codes*/
+/*LTC®2633 Resolution*/
 typedef enum
 {
-  DAC0 = 0x00,
-  dac0 = 0x00,
-  DAC1 = 0x01,
-  dac1 = 0x01,
-  BOTH = 0x0F,
-  both = 0x0f
-} DAC;
+  VIII = 0x08,
+  viii = 0x08,
+  eight = 0x08,
+  EIGHT = 0x08,
+  X = 0x0A,
+  x = 0x0a,
+  ten = 0x0a,
+  TEN = 0x0a,
+  XII = 0x0C,
+  xii = 0x0c,
+  twelve = 0x0c,
+  TWELVE = 0x0c
+} resolution;
 
+/*LTC®2633 Configuration Structure*/
+typedef struct
+{
+  rate Rate;
+  address Address;
+  resolution Resolution;
+} configuration;
 
 #endif

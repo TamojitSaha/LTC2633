@@ -35,15 +35,15 @@
 
 
 /*Command Codes*/
-#define write_input_reg     0x00  																//Write to Input Register n
-#define update_dac_reg      0x01  																//Update (Power-Up) DAC Register n
-#define write_update_all    0x02  																//Write to Input Register n, Update (Power-Up) All
-#define write_update_dac    0x03  																//Write to and Update (Power-Up) DAC Register n
-#define power_down_dac      0x04  																//Power-Down n
-#define power_down_all      0x05  																//Power-Down Chip (All DAC’s and Reference)
-#define internal_reference  0x06  																//Select Internal Reference (Power-Up Reference)
-#define external_reference  0x07  																//Select External Reference (Power-Down Internal Reference)
-#define no_operation        0x0F  																//No Operation
+#define write_input_reg     0x00  																        //Write to Input Register n
+#define update_dac_reg      0x01  																        //Update (Power-Up) DAC Register n
+#define write_update_all    0x02  																        //Write to Input Register n, Update (Power-Up) All
+#define write_update_dac    0x03  																        //Write to and Update (Power-Up) DAC Register n
+#define power_down_dac      0x04  																        //Power-Down n
+#define power_down_all      0x05  																        //Power-Down Chip (All DAC’s and Reference)
+#define internal_reference  0x06  																        //Select Internal Reference (Power-Up Reference)
+#define external_reference  0x07  																        //Select External Reference (Power-Down Internal Reference)
+#define no_operation        0x0F  																        //No Operation
 
 
 class LTC2633
@@ -51,25 +51,25 @@ class LTC2633
   public:
     LTC2633();
 
-    void configure(address _address = global, resolution _resolution = XII, rate _rate = slow);	//Set I2C Address;
-    void setResolution(resolution = TWELVE);                                                    //Switch DAC resolution
-    void setRate(rate = slow);																	                                //Set I2C frequency;
+    void configure(configuration _configuration = {slow, global, XII});   //Configure DAC over I2C Address
+    void setResolution(resolution = TWELVE);                              //Switch DAC resolution
+    void setRate(rate = slow);																	          //Set I2C frequency;
 
 
-    void internalReference(void);                                                               //Switch to internal reference voltage
-    void externalReference(void);                                                               //Switch to external reference voltage
+    void internalReference(void);                                         //Switch to internal reference voltage
+    void externalReference(void);                                         //Switch to external reference voltage
 
 
-    void powerOff(void);                                                                        //Shutdown entirely
-    void powerDown(DAC _dac = both);                                                            //Power down all DAC, by default
-    void volt(uint64_t _data, DAC _dac = both);                                          		    //Write voltage code and update BOTH DACs, by default
-    void load(DAC _dac = both);                                                         		    //Updates previously stored value of both DAC registers
-    void store(uint64_t _data, DAC _dac = both);                                          		  //Stores data to both DAC registers, by default
+    void powerOff(void);                                                  //Shutdown entirely
+    void powerDown(DAC _dac = both);                                      //Power down all DAC, by default
+    void volt(uint64_t _data, DAC _dac = both);                           //Write voltage code and update BOTH DACs, by default
+    void load(DAC _dac = both);                                           //Updates previously stored value of both DAC registers
+    void store(uint64_t _data, DAC _dac = both);                          //Stores data to both DAC registers, by default
 
 
   private:
-    uint8_t rsln = 0x0C;  //Default resolution is set to TWELVE
-    uint8_t adrs = 0x73;  //Default address is set to GLOBAL
+    uint8_t rsln = 0x0C;                                                  //Default resolution is set to TWELVE
+    uint8_t adrs = 0x73;                                                  //Default address is set to GLOBAL
 
     uint8_t data_low = 0x00;
     uint8_t data_high = 0x00;

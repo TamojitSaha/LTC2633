@@ -35,7 +35,7 @@ LTC2633::LTC2633()
 
 }
 
-void LTC2633::configure(address _adr, resolution _rsl, rate _rte)
+void LTC2633::configure(configuration _cfg)
 {
   /*
     Takes 8bits of I2C Address (Data Type: "address")
@@ -44,19 +44,11 @@ void LTC2633::configure(address _adr, resolution _rsl, rate _rte)
     and
     I2C transfer rate as input(s) (Data Type: "rate")
   */
-  adrs = _adr;
-  rsln = _rsl;
   Wire.begin();
-  Wire.setClock(_rte);
+  Wire.setClock(_cfg.Rate);
   Wire.end();
-}
-
-void LTC2633::setResolution(resolution _rsl)
-{
-  /*
-    Sets DAC resolution
-  */
-  rsln = _rsl;
+  adrs = _cfg.Address;
+  rsln = _cfg.Resolution;
 }
 
 void LTC2633::setRate(rate _rte)
@@ -69,6 +61,13 @@ void LTC2633::setRate(rate _rte)
   Wire.end();
 }
 
+void LTC2633::setResolution(resolution _rsl)
+{
+  /*
+    Sets DAC resolution
+  */
+  rsln = _rsl;
+}
 
 void LTC2633::volt(uint64_t data, DAC dac)
 {
@@ -103,7 +102,6 @@ void LTC2633::store(uint64_t data, DAC dac)
   dataman(data);
   wireman(dac, data_high, data_low); /*Actually it should be -> wireman(((write_input_reg << 4) | dac), data_high, data_low)*/
 }
-
 
 void LTC2633::powerOff(void)
 {
@@ -155,6 +153,7 @@ void LTC2633::control(uint8_t code)
   WIRE_WRITE(code);
   Wire.end();
 }
+
 void LTC2633::wireman(uint8_t code, uint8_t data_high, uint8_t data_low)
 {
   /*

@@ -41,28 +41,37 @@ LTC2633 myDAC;                  /*declare*/
 
 /*
   NOTE #1:  Please find the custom datatype used in this library in table given below
-  +------------+--------------------------------+---------------+
-  | Data Type  |              Values            |  Description  |
-  +------------+--------------------------------+---------------+
-  |            | FAST, fast,                    |    Set        |
-  |   rate     | SLOW, slow,                    |  I2C Speed    |
-  +------------+--------------------------------+---------------+
-  |            | VIII, viii, eight, EIGHT       |     Set       |
-  | resolution | X, x, ten, TEN                 |     DAC       |
-  |            | XII, xii, twelve, TWELVE       |   Resolution  |
-  +------------+--------------------------------+---------------+
-  |            | DAC0, dac0,                    |               |
-  |    DAC     | DAC1, dac1,                    |   Select DAC  |
-  |            | BOTH, both                     |               |
-  +------------+--------------------------------+---------------+
-  |            | NC, nc,                        |               |
-  |            | GND, gnd,                      |               |
-  |  address   | VCC, vcc,                      | Select DAC    |
-  |            | ALL, all,                      | address (I2C) |
-  |            | GLOBAL, global                 |               |
-  +------------+--------------------------------+---------------+
+  +-------------+--------------------------------+---------------+
+  |  Data Type  |              Values            |  Description  |
+  +-------------+--------------------------------+---------------+
+  |             | FAST, fast,                    |    Set        |
+  |  rate       | SLOW, slow,                    |  I2C Speed    |
+  +-------------+--------------------------------+---------------+
+  |             | VIII, viii, eight, EIGHT       |     Set       |
+  |  resolution | X, x, ten, TEN                 |     DAC       |
+  |             | XII, xii, twelve, TWELVE       |   Resolution  |
+  +-------------+--------------------------------+---------------+
+  |             | NC, nc,                        |               |
+  |             | GND, gnd,                      |               |
+  |  address    | VCC, vcc,                      | Select DAC    |
+  |             | ALL, all,                      | address (I2C) |
+  |             | GLOBAL, global                 |               |
+  +-------------+--------------------------------+---------------+
+  |configuration| various                        |  Structure    |
+  +-------------+--------------------------------+---------------+
+  
+  NOTE #2:  The members(s) of the structure of "configuration" data type
+  with coresponding member data type(s) described below
+  
+  +---------------+------------+--------------+
+  |   Structure   | Member(s)  | Data Type(s) |
+  +---------------+------------+--------------+
+  |               | Rate       | rate         |
+  | configuration | Address    | address      |
+  |               | Resolution | resolution   |
+  +---------------+------------+--------------+
 
-  NOTE #2:  Please follow the keyword table given below
+  NOTE #3:  Please follow the keyword table given below
   +#######################################################################+
   +--------------+--------------+-----------------------------------------+
   |              |              | write_input_reg, update_dac_reg,        |
@@ -77,41 +86,54 @@ void setup()
 {
   myDAC.configure();
   /*
-    ABOUT : Confiure DAC address, resolution and I2C transfer rate
+    ABOUT : Confiure I2C transfer rate, DAC address and DAC resolution
 
-    USAGE : Takes 8bits of I2C Address (Data Type: "address")
-            and
-            DAC resolution in bit(s) (Data Type: "resolution")
-            and
-            I2C transfer rate as input(s) (Data Type: "rate")
+    USAGE : Takes structure of data (data type: "configuration") having members:
+              I2C transfer rate as input(s) (Data Type: "rate")
+              and
+              8bits of I2C Address (Data Type: "address")
+              and
+              DAC resolution in bit(s) (Data Type: "resolution")
 
     ACCEPTED FORMATS :
     <put name here>.configure();
-    <put name here>.configure(Address);
-    <put name here>.configure(Address, Resolution);
-    <put name here>.configure(Address, Resolution, Rate);
+    <put name here>.configure(Configuration);
+      GIVEN :
+      configuration Configuration = {slow};
+      configuration Configuration = {.Rate = slow};
+      configuration Configuration = {slow, global};
+      configuration Configuration = {.Rate = slow, .Address = global};
+      configuration Configuration = {slow, global, XII};
+      configuration Configuration = {.Rate = slow, .Address = global, .Resolution = XII};
 
     EXAMPLES:
-    myDAC.cfgr();
+    myDAC.configure();
     //Switch 'myDAC' to default configuration:
       //Address = GLOBAL (0x73)
       //Resolution = XII (0x0C)
       //Rate = slow (0x0186A0)
 
-    myDAC.configure(VCC);
+    myDAC.configure({slow});
     //Switch 'myDAC' to given configuration:
-      //Address = VCC (0x12)
+      //Rate = slow (0x0186A0)
 
-    myDAC.configure(VCC, XII);
+    myDAC.configure({.Address = VCC, .Resolution = XII});
     //Switch 'myDAC' to given configuration:
       //Address = VCC (0x12),
       //Resolution = XII (0x0C)
 
-    myDAC.configure(VCC, xii, slow);
+    myDAC.configure({slow, VCC, XII});
     //Switch 'myDAC' to given configuration:
+      //Rate = slow (0x0186A0),
       //Address = VCC (0x12),
-      //Resolution = XII (0x0C),
-      //Rate = slow (0x0186A0)
+      //Resolution = XII (0x0C)
+
+    configuration Configuration = {.Rate = slow, .Address = global, .Resolution = XII};
+    myDAC.configure(Configuration);
+    //Switch 'myDAC' to given configuration:
+      //Rate = slow (0x0186A0),
+      //Address = VCC (0x12),
+      //Resolution = XII (0x0C)
   */
 
   myDAC.setRate();
@@ -138,7 +160,7 @@ void setup()
     <put name here>.setResolution();      		//Defines resolution as 12 bits (default)
     <put name here>.setResolution(Resolution);	//Defines resolution as user specifies with proper keyword
 
-    Note #3: Unless changed by calling function with proper resolution(Keyword) listed below, system initializes to 12 bits resolution setup.
+    Note #4: Unless changed by calling function with proper resolution(Keyword) listed below, system initializes to 12 bits resolution setup.
 
     +--------------------------+-------------------------------+
     |         Keyword          |          Operation            |
@@ -179,7 +201,7 @@ void setup()
   */
 
   /*
-    Note #3:  The following parts have POWER-ON REFERANCE MODE set to external reference.
+    Note #5:  The following parts have POWER-ON REFERANCE MODE set to external reference.
 
     WARNING #3: Either use external voltage reference IC or remember switching to internal reference mode while using these parts.
 
@@ -233,7 +255,7 @@ void loop()
 
     USAGE : Takes "DAC" (8bits of DAC register address) as input as input
 
-    Note #5 : Recommended to use after 'value' is '<put name here>.store()' -ed earlier
+    Note #6 : Recommended to use after 'value' is '<put name here>.store()' -ed earlier
 
     ACCEPTED FORMATS:
     <put name here>.load();

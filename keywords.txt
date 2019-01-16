@@ -89,6 +89,7 @@ DAC	LITERAL1
 rate	LITERAL1
 address	LITERAL1
 resolution	LITERAL1
+configuration	LITERAL1
 
 
 #######################################
